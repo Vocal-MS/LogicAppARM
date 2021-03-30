@@ -7,11 +7,29 @@ trigger:
 - master
 
 pool:
-  vmImage: ubuntu-latest
+  vmImage: windows-latest
 
 steps:
+- task: VSBuild@1
+  inputs:
+    solution: '**\*.sln'
+
 - task: PublishBuildArtifacts@1
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
     publishLocation: 'Container'
+
+- task: AzureResourceManagerTemplateDeployment@3
+  inputs:
+    deploymentScope: 'Resource Group'
+    azureResourceManagerConnection: 'ForARMdevops'
+    subscriptionId: 'a1a8132b-b6cc-4326-9665-088b48766cc7'
+    action: 'Create Or Update Resource Group'
+    resourceGroupName: 'CustomerCase'
+    location: 'East US'
+    templateLocation: 'Linked artifact'
+    csmFile: '$(Build.ArtifactStagingDirectory)\**\LogicApp.json'
+    csmParametersFile: '$(Build.ArtifactStagingDirectory)\**\LogicApp.parameters.json'
+    overrideParameters: '-logicAppName LogicAppARM1'
+    deploymentMode: 'Incremental'
