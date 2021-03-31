@@ -58,49 +58,6 @@
         "description": "Location of the Logic App."
       }
     },
-    "azureblob_2_Connection_Name": {
-      "type": "string",
-      "defaultValue": "azureblob-7"
-    },
-    "azureblob_2_Connection_DisplayName": {
-      "type": "string",
-      "defaultValue": "testarm"
-    },
-    "azureblob_2_accountName": {
-      "type": "string",
-      "metadata": {
-        "description": "Name of the storage account the connector should use."
-      },
-      "defaultValue": "testnetwork001"
-    },
-    "azureblob_2_accessKey": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Specify a valid primary/secondary storage account access key."
-      }
-    },
-    "azureblob_2_authType": {
-      "type": "string",
-      "metadata": {
-        "description": "Authentication type to connect to your database"
-      },
-      "allowedValues": [
-        "basic",
-        "anonymous"
-      ]
-    },
-    "azureblob_2_privacySetting": {
-      "type": "string",
-      "metadata": {
-        "description": "Privacy Setting"
-      },
-      "allowedValues": [
-        "None",
-        "Private",
-        "Organizational",
-        "Public"
-      ]
-    },
     "azureblob_3_Connection_Name": {
       "type": "string",
       "defaultValue": "azureblob-8"
@@ -217,24 +174,6 @@
     {
       "type": "MICROSOFT.WEB/CONNECTIONS",
       "apiVersion": "2018-07-01-preview",
-      "name": "[parameters('azureblob_2_Connection_Name')]",
-      "location": "[parameters('logicAppLocation')]",
-      "properties": {
-        "api": {
-          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'azureblob')]"
-        },
-        "displayName": "[parameters('azureblob_2_Connection_DisplayName')]",
-        "parameterValues": {
-          "accountName": "[parameters('azureblob_2_accountName')]",
-          "accessKey": "[parameters('azureblob_2_accessKey')]",
-          "authType": "[parameters('azureblob_2_authType')]",
-          "privacySetting": "[parameters('azureblob_2_privacySetting')]"
-        }
-      }
-    },
-    {
-      "type": "MICROSOFT.WEB/CONNECTIONS",
-      "apiVersion": "2018-07-01-preview",
       "name": "[parameters('azureblob_3_Connection_Name')]",
       "location": "[parameters('logicAppLocation')]",
       "properties": {
@@ -244,7 +183,7 @@
         "displayName": "[parameters('azureblob_3_Connection_DisplayName')]",
         "parameterValues": {
           "accountName": "[parameters('azureblob_3_accountName')]",
-          "accessKey": "[parameters('azureblob_3_accessKey')]",
+          "accessKey": "TxckYFMLXpfA0TC0qcv/wKccYs8viEDjB5e98rrVBiBsvEcPTzszxH+Y6ENAD3Dp+EunNRAdnx/zevySOWMsYg==",
           "authType": "[parameters('azureblob_3_authType')]",
           "privacySetting": "[parameters('azureblob_3_privacySetting')]"
         }
