@@ -85,7 +85,8 @@
       "metadata": {
         "description": "Authentication type to connect to your database"
       },
-      "defaultValues": [
+      "defaultValue": "basic",
+      "allowedValues": [
         "basic",
         "anonymous"
       ]
