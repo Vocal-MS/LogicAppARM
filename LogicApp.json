@@ -96,6 +96,7 @@
       "metadata": {
         "description": "Privacy Setting"
       },
+      "defaultValue": "None",
       "allowedValues": [
         "None",
         "Private",
