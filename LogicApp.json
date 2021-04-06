@@ -103,6 +103,22 @@
         "Organizational",
         "Public"
       ]
+    },
+    "iseName": {
+      "type": "string",
+      "defaultValue": "CSS-ISE"
+    },
+    "iseResourceGroup": {
+      "type": "string",
+      "defaultValue": "CSS-ISE-TEST"
+    },
+    "networkAccessList": {
+      "type": "array",
+      "defaultValue": [
+        "10.0.1.64/27",
+        "10.0.1.96/27",
+        "10.0.1.128/27"
+      ]
     }
   },
   "variables": {},
@@ -116,6 +132,11 @@
       },
       "apiVersion": "2016-06-01",
       "properties": {
+        "integrationServiceEnvironment": {
+          "name": "[parameters('iseName')]",
+          "id": "[resourceId(parameters('iseResourceGroup'),'Microsoft.Logic/integrationServiceEnvironments/',parameters('iseName'))]",
+          "type": "Microsoft.Logic/integrationServiceEnvironments"
+        },
         "definition": {
           "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
           "actions": {
@@ -176,18 +197,36 @@
       "name": "[parameters('azureblob_1_Connection_Name')]",
       "location": "[parameters('logicAppLocation')]",
       "properties": {
-        "api": {
-          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'azureblob')]"
+        "integrationServiceEnvironment": {
+          "name": "[parameters('iseName')]",
+          "id": "[resourceId(parameters('iseResourceGroup'),'Microsoft.Logic/integrationServiceEnvironments/',parameters('iseName'))]",
+          "type": "Microsoft.Logic/integrationServiceEnvironments"
         },
-        "displayName": "[parameters('azureblob_1_Connection_DisplayName')]",
-        "parameterValues": {
-          "accountName": "[parameters('azureblob_1_accountName')]",
-          "accessKey": "[parameters('azureblob_1_accessKey')]",
-          "authType": "[parameters('azureblob_1_authType')]",
-          "privacySetting": "[parameters('azureblob_1_privacySetting')]"
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "copy": [
+            {
+              "name": "virtualNetworkRules",
+              "count": "[length(parameters('networkAccessList'))]",
+              "input": {
+                "id": "[parameters('networkAccessList')[copyIndex('virtualNetworkRules')]]",
+                "action": "Allow",
+                "state": "Succeeded"
+              }
+            }
+          ],
+          "api": {
+            "id": "[concat(resourceId(parameters('iseResourceGroup'), '/providers/Microsoft.Logic/integrationServiceEnvironments/', parameters('iseName')), '/managedApis/', 'azureblob')]"
+          },
+          "displayName": "[parameters('azureblob_1_Connection_DisplayName')]",
+          "parameterValues": {
+            "accountName": "[parameters('azureblob_1_accountName')]",
+            "accessKey": "[parameters('azureblob_1_accessKey')]",
+            "authType": "[parameters('azureblob_1_authType')]",
+            "privacySetting": "[parameters('azureblob_1_privacySetting')]"
+          }
         }
       }
-    }
   ],
   "outputs": {}
 }
