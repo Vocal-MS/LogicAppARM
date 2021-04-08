@@ -103,7 +103,7 @@
     },
     "filesystem_1_Connection_Name": {
       "type": "string",
-      "defaultValue": "filesystem-11"
+      "defaultValue": "filesystem-20"
     },
     "filesystem_1_Connection_DisplayName": {
       "type": "string",
