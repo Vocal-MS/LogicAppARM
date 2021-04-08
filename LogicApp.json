@@ -92,7 +92,7 @@
     },
     "filesystem_1_password": {
       "type": "securestring",
-      "reference": {
+      "defaultValue": {
       "keyVault": {
           "id": "/subscriptions/a1a8132b-b6cc-4326-9665-088b48766cc7/resourceGroups/CustomerCase/providers/Microsoft.KeyVault/vaults/testLogicAppvocal"
         },
