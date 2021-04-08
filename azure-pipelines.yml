@@ -31,5 +31,7 @@ steps:
     templateLocation: 'Linked artifact'
     csmFile: '$(Build.ArtifactStagingDirectory)\**\LogicApp.json'
     csmParametersFile: '$(Build.ArtifactStagingDirectory)\**\LogicApp.parameters.json'
-    overrideParameters: '-logicAppName LogicAppARM22'
+    overrideParameters: '-logicAppName LogicAppARM23'
     deploymentMode: 'Incremental'
+
+
