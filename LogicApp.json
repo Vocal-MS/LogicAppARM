@@ -9,7 +9,7 @@
       "metadata": {
         "description": "Name of the Logic App."
       }
-    },
+    },  
     "logicAppLocation": {
       "type": "string",
       "defaultValue": "westus",
@@ -97,6 +97,18 @@
         "description": "Password credential"
       }
     },
+    "filesystem_1_password": {
+      "type": "securestring",
+      "reference": {
+      "keyVault": {
+          "id": "/subscriptions/a1a8132b-b6cc-4326-9665-088b48766cc7/resourceGroups/CustomerCase/providers/Microsoft.KeyVault/vaults/testLogicAppvocal"
+        },
+        "secretName": "testarm"
+       },
+       "metadata": {
+        "description": "Password credential"
+      }
+     },  
     "filesystem_1_privacySetting": {
       "type": "string",
       "metadata": {
