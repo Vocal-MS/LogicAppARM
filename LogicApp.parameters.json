@@ -5,12 +5,6 @@
     "logicAppName": {
       "value": "testfromvscode"
     },
-    "azureblob_1_authType": {
-      "value": "basic"
-    },
-    "azureblob_1_privacySetting": {
-      "value": "None"
-    },
     "filesystem_1_privacySetting": {
       "value": "None"
     }
