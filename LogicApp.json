@@ -12,7 +12,7 @@
     },
     "logicAppLocation": {
       "type": "string",
-      "defaultValue": "[resourceGroup().location]",
+      "defaultValue": "westus",
       "allowedValues": [
         "[resourceGroup().location]",
         "eastasia",
@@ -60,22 +60,21 @@
     },
     "azureblob_1_Connection_Name": {
       "type": "string",
-      "defaultValue": "azureblob"
+      "defaultValue": "azureblob-2"
     },
     "azureblob_1_Connection_DisplayName": {
       "type": "string",
-      "defaultValue": "testnewarm"
+      "defaultValue": "sasattistorageaccount"
     },
     "azureblob_1_accountName": {
       "type": "string",
       "metadata": {
         "description": "Name of the storage account the connector should use."
       },
-      "defaultValue": "testnetwork001"
+      "defaultValue": "sasattistorageaccount"
     },
     "azureblob_1_accessKey": {
       "type": "securestring",
-      "defaultValue": "TxckYFMLXpfA0TC0qcv/wKccYs8viEDjB5e98rrVBiBsvEcPTzszxH+Y6ENAD3Dp+EunNRAdnx/zevySOWMsYg==",
       "metadata": {
         "description": "Specify a valid primary/secondary storage account access key."
       }
@@ -85,7 +84,6 @@
       "metadata": {
         "description": "Authentication type to connect to your database"
       },
-      "defaultValue": "basic",
       "allowedValues": [
         "basic",
         "anonymous"
@@ -96,7 +94,6 @@
       "metadata": {
         "description": "Privacy Setting"
       },
-      "defaultValue": "None",
       "allowedValues": [
         "None",
         "Private",
@@ -104,21 +101,60 @@
         "Public"
       ]
     },
-    "iseName": {
+    "filesystem_1_Connection_Name": {
       "type": "string",
-      "defaultValue": "CSS-ISE"
+      "defaultValue": "filesystem-11"
     },
-    "iseResourceGroup": {
+    "filesystem_1_Connection_DisplayName": {
       "type": "string",
-      "defaultValue": "CSS-ISE-TEST"
+      "defaultValue": "OPDGandISE"
     },
-    "networkAccessList": {
-      "type": "array",
-      "defaultValue": [
-        "10.0.1.64/27",
-        "10.0.1.96/27",
-        "10.0.1.128/27"
+    "filesystem_1_rootfolder": {
+      "type": "string",
+      "defaultValue": "C:\\",
+      "metadata": {
+        "description": "Root folder path (examples: \\\\MACHINE\\myShare or C:\\myShare)"
+      }
+    },
+    "filesystem_1_authType": {
+      "type": "string",
+      "metadata": {
+        "description": "Authentication type to connect to your gateway computer"
+      },
+      "defaultValue": "windows",
+      "allowedValues": [
+        "windows"
       ]
+    },
+    "filesystem_1_username": {
+      "type": "securestring",
+      "defaultValue": "fareast\\jiaqitong",
+      "metadata": {
+        "description": "Username credential (e.g. DOMAIN\\Username)"
+      }
+    },
+    "filesystem_1_password": {
+      "type": "securestring",
+      "defaultValue": "tusPHc0_FGr$[BQ",
+      "metadata": {
+        "description": "Password credential"
+      }
+    },
+    "filesystem_1_privacySetting": {
+      "type": "string",
+      "metadata": {
+        "description": "Privacy Setting"
+      },
+      "allowedValues": [
+        "None",
+        "Private",
+        "Organizational",
+        "Public"
+      ]
+    },
+    "filesystem_1_gateway_id": {
+      "type": "string",
+      "defaultValue": "/subscriptions/a1a8132b-b6cc-4326-9665-088b48766cc7/resourceGroups/CustomerCase/providers/Microsoft.Web/connectionGateways/testOPDG"
     }
   },
   "variables": {},
@@ -132,27 +168,19 @@
       },
       "apiVersion": "2016-06-01",
       "properties": {
-        "integrationServiceEnvironment": {
-          "name": "[parameters('iseName')]",
-          "id": "[resourceId(parameters('iseResourceGroup'),'Microsoft.Logic/integrationServiceEnvironments/',parameters('iseName'))]",
-          "type": "Microsoft.Logic/integrationServiceEnvironments"
-        },
         "definition": {
           "$schema": "https://schema.management.azure.com/providers/Microsoft.Logic/schemas/2016-06-01/workflowdefinition.json#",
           "actions": {
-            "Get_blob_content": {
+            "List_files_in_folder": {
               "type": "ApiConnection",
               "inputs": {
                 "host": {
                   "connection": {
-                    "name": "@parameters('$connections')['azureblob']['connectionId']"
+                    "name": "@parameters('$connections')['filesystem_1']['connectionId']"
                   }
                 },
                 "method": "get",
-                "path": "/datasets/default/files//content",
-                "queries": {
-                  "inferContentType": true
-                }
+                "path": "/datasets/default/folders/"
               },
               "runAfter": {}
             }
@@ -167,7 +195,7 @@
             "Recurrence": {
               "type": "Recurrence",
               "recurrence": {
-                "frequency": "Month",
+                "frequency": "Minute",
                 "interval": 3
               }
             }
@@ -178,17 +206,17 @@
         "parameters": {
           "$connections": {
             "value": {
-              "azureblob": {
-                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'azureblob')]",
-                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('azureblob_1_Connection_Name'))]",
-                "connectionName": "[parameters('azureblob_1_Connection_Name')]"
+              "filesystem_1": {
+                "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'filesystem')]",
+                "connectionId": "[resourceId('Microsoft.Web/connections', parameters('filesystem_1_Connection_Name'))]",
+                "connectionName": "[parameters('filesystem_1_Connection_Name')]"
               }
             }
           }
         }
       },
       "dependsOn": [
-        "[resourceId('Microsoft.Web/connections', parameters('azureblob_1_Connection_Name'))]"
+        "[resourceId('Microsoft.Web/connections', parameters('filesystem_1_Connection_Name'))]"
       ]
     },
     {
@@ -197,36 +225,40 @@
       "name": "[parameters('azureblob_1_Connection_Name')]",
       "location": "[parameters('logicAppLocation')]",
       "properties": {
-        "integrationServiceEnvironment": {
-          "name": "[parameters('iseName')]",
-          "id": "[resourceId(parameters('iseResourceGroup'),'Microsoft.Logic/integrationServiceEnvironments/',parameters('iseName'))]",
-          "type": "Microsoft.Logic/integrationServiceEnvironments"
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'azureblob')]"
         },
-        "networkAcls": {
-          "bypass": "AzureServices",
-          "copy": [
-            {
-              "name": "virtualNetworkRules",
-              "count": "[length(parameters('networkAccessList'))]",
-              "input": {
-                "id": "[parameters('networkAccessList')[copyIndex('virtualNetworkRules')]]",
-                "action": "Allow",
-                "state": "Succeeded"
-              }
-            }
-          ],
-          "api": {
-            "id": "[concat(resourceId(parameters('iseResourceGroup'), '/providers/Microsoft.Logic/integrationServiceEnvironments/', parameters('iseName')), '/managedApis/', 'azureblob')]"
-          },
-          "displayName": "[parameters('azureblob_1_Connection_DisplayName')]",
-          "parameterValues": {
-            "accountName": "[parameters('azureblob_1_accountName')]",
-            "accessKey": "[parameters('azureblob_1_accessKey')]",
-            "authType": "[parameters('azureblob_1_authType')]",
-            "privacySetting": "[parameters('azureblob_1_privacySetting')]"
+        "displayName": "[parameters('azureblob_1_Connection_DisplayName')]",
+        "parameterValues": {
+          "accountName": "[parameters('azureblob_1_accountName')]",
+          "accessKey": "[parameters('azureblob_1_accessKey')]",
+          "authType": "[parameters('azureblob_1_authType')]",
+          "privacySetting": "[parameters('azureblob_1_privacySetting')]"
+        }
+      }
+    },
+    {
+      "type": "MICROSOFT.WEB/CONNECTIONS",
+      "apiVersion": "2018-07-01-preview",
+      "name": "[parameters('filesystem_1_Connection_Name')]",
+      "location": "[parameters('logicAppLocation')]",
+      "properties": {
+        "api": {
+          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'filesystem')]"
+        },
+        "displayName": "[parameters('filesystem_1_Connection_DisplayName')]",
+        "parameterValues": {
+          "rootfolder": "[parameters('filesystem_1_rootfolder')]",
+          "authType": "[parameters('filesystem_1_authType')]",
+          "username": "[parameters('filesystem_1_username')]",
+          "password": "[parameters('filesystem_1_password')]",
+          "privacySetting": "[parameters('filesystem_1_privacySetting')]",
+          "gateway": {
+            "id": "[parameters('filesystem_1_gateway_id')]"
           }
         }
       }
+    }
   ],
   "outputs": {}
 }
