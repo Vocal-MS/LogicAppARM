@@ -84,14 +84,14 @@
       ]
     },
     "filesystem_1_username": {
-      "type": "securestring",
+      "type": "string",
       "defaultValue": "fareast\\jiaqitong",
       "metadata": {
         "description": "Username credential (e.g. DOMAIN\\Username)"
       }
     },
     "filesystem_1_password": {
-      "type": "securestring",
+      "type": "string",
       "defaultValue": {
       "keyVault": {
           "id": "/subscriptions/a1a8132b-b6cc-4326-9665-088b48766cc7/resourceGroups/CustomerCase/providers/Microsoft.KeyVault/vaults/testLogicAppvocal"
