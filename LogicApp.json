@@ -60,11 +60,11 @@
     },
     "filesystem_1_Connection_Name": {
       "type": "string",
-      "defaultValue": "filesystem-20"
+      "defaultValue": "filesystem-19"
     },
     "filesystem_1_Connection_DisplayName": {
       "type": "string",
-      "defaultValue": "OPDGandISE"
+      "defaultValue": "OPDGandISE2"
     },
     "filesystem_1_rootfolder": {
       "type": "string",
@@ -88,13 +88,6 @@
       "defaultValue": "fareast\\jiaqitong",
       "metadata": {
         "description": "Username credential (e.g. DOMAIN\\Username)"
-      }
-    },
-    "filesystem_1_password": {
-      "type": "securestring",
-      "defaultValue": "tusPHc0_FGr$[BQ",
-      "metadata": {
-        "description": "Password credential"
       }
     },
     "filesystem_1_password": {
