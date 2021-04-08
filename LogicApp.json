@@ -179,24 +179,6 @@
     {
       "type": "MICROSOFT.WEB/CONNECTIONS",
       "apiVersion": "2018-07-01-preview",
-      "name": "[parameters('azureblob_1_Connection_Name')]",
-      "location": "[parameters('logicAppLocation')]",
-      "properties": {
-        "api": {
-          "id": "[concat(subscription().id, '/providers/Microsoft.Web/locations/', parameters('logicAppLocation'), '/managedApis/', 'azureblob')]"
-        },
-        "displayName": "[parameters('azureblob_1_Connection_DisplayName')]",
-        "parameterValues": {
-          "accountName": "[parameters('azureblob_1_accountName')]",
-          "accessKey": "[parameters('azureblob_1_accessKey')]",
-          "authType": "[parameters('azureblob_1_authType')]",
-          "privacySetting": "[parameters('azureblob_1_privacySetting')]"
-        }
-      }
-    },
-    {
-      "type": "MICROSOFT.WEB/CONNECTIONS",
-      "apiVersion": "2018-07-01-preview",
       "name": "[parameters('filesystem_1_Connection_Name')]",
       "location": "[parameters('logicAppLocation')]",
       "properties": {
